@@ -1,7 +1,6 @@
+/* eslint-disable no-undef */
 import dotenv from 'dotenv';
 dotenv.config()
-
-console.log(process)
 
 const config = {
     api_host: process.env.REACT_APP_API_HOST,

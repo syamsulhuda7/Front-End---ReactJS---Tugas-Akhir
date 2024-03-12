@@ -1,4 +1,4 @@
-import './App.css'
+// import './App.css'
 // import CardProduct from './components/CardProduct'
 import Home from './pages/Home'
 
