@@ -13,8 +13,8 @@ const SNavbar = styled.div`
 `;
 
 const H1 = styled.h1`
+  font-size: 40px;
   color: white;
-  font-family: unset;
   margin: 0;
   width: 330px;
 `;
@@ -26,9 +26,8 @@ const Div = styled.div`
   gap: 20px;
 `;
 
-const H5 = styled.h5`
+const H5 = styled.h3`
   color: white;
-  font-family: unset;
   font-weight: lighter;
   margin: 0;
   cursor: pointer;
@@ -41,13 +40,15 @@ const H5 = styled.h5`
 `;
 
 const Input = styled.input`
-    padding: 3px 5px;
+    padding: 7px 10px;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.2);
     border: transparent;
 
     &::placeholder {
         color: white;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size: larger;
     }
 `;
 
@@ -57,19 +58,29 @@ const Search = styled.img`
   width: auto;
   top: 20px;
   right: 185px;
+  cursor: pointer;
 `;
 
 const Login = styled.button`
-  padding: 3px 15px;
+  padding: 6px 15px;
   border-radius: 10px;
   background-color: transparent;
   border: 2px solid white;
   color: white;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+  &:hover {
+    background-color: rgba(255,255,255,.2);
+    scale: 103%;
+  }
 `;
 
 const Img = styled.img`
   height: 30px;
   width: auto;
+  cursor: pointer;
 `;
 
 function Navbar() {
