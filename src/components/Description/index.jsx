@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 const Container = styled.div`
@@ -79,12 +80,15 @@ const Img3 = styled.img`
 `;
 
 function Description() {
+
+const navigate = useNavigate()
+
   return (
     <>
       <Container>
         <Div style={{width:'50%'}}>
           <H1>Professional <Span> Coffee Shop </Span> and <Span> Eatery </Span></H1>
-          <Button>Detail</Button>
+          <Button onClick={()=>navigate('/profile')}>Detail</Button>
         </Div>
         <div style={{width:'50%'}}>
           <Img1 src="src/assets/profile/c.jpg" style={{top:'800px', right:'230px', height:'450px'}}/>

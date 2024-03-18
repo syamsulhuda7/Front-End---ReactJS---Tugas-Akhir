@@ -1,4 +1,7 @@
+/* eslint-disable react/prop-types */
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import InputSearch from "./InputSearch";
 
 const SNavbar = styled.div`
   width: 100%;
@@ -39,27 +42,6 @@ const H5 = styled.h3`
     }
 `;
 
-const Input = styled.input`
-    padding: 7px 10px;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: transparent;
-
-    &::placeholder {
-        color: white;
-        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        font-size: larger;
-    }
-`;
-
-const Search = styled.img`
-  position: absolute;
-  height: 20px;
-  width: auto;
-  top: 20px;
-  right: 185px;
-  cursor: pointer;
-`;
 
 const Login = styled.button`
   padding: 6px 15px;
@@ -83,26 +65,22 @@ const Img = styled.img`
   cursor: pointer;
 `;
 
-function Navbar() {
+function Navbar({inputValue}) {
+  const navigate = useNavigate()
+
+
+
   return (
     <>
       <SNavbar>
         <H1>SCAFE</H1>
         <Div style={{gap:'70px'}}>
-          <H5>Home</H5>
-          <H5>Product</H5>
-          <H5>Profile</H5>
+          <H5 onClick={()=>navigate('/')}>Home</H5>
+          <H5 onClick={()=>navigate('/product')}>Product</H5>
+          <H5 onClick={()=>navigate('/profile')}>Profile</H5>
         </Div>
         <Div>
-          <form action="" placeholder="search">
-            <Input
-              type="text"
-              id="nama"
-              name="nama"
-              placeholder="Search"
-            ></Input>
-            <Search src="src/assets/search.png" alt="" />
-          </form>
+          <InputSearch inputValue={inputValue}/>
           <Login>Log In</Login>
           <Img src="src/assets/cart.png" />
         </Div>
