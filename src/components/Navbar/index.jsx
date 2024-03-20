@@ -66,9 +66,8 @@ const Img = styled.img`
 `;
 
 function Navbar({inputValue}) {
+
   const navigate = useNavigate()
-
-
 
   return (
     <>

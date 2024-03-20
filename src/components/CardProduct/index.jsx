@@ -62,11 +62,18 @@ const DivDown = styled.div`
   width: 100%;
 `;
 
-function CardProduct({ data }) {
+function CardProduct({ data, nilaiId, popUp }) {
+
+  function handleClick (id) {
+    nilaiId(id)
+    popUp(true)
+  }
+
+
   return (
     <Cover>
       {data.map((item, i) => (
-        <Container key={i}>
+        <Container key={i} >
           <Img
             src={`http://localhost:3000/images/products/${item.image_url}`}
           ></Img>
@@ -82,7 +89,7 @@ function CardProduct({ data }) {
                 <h4>Rp. {item.price}</h4>
                 <h4>Stock {item.stock} pcs</h4>
               </DivHarga>
-              <Button>Buy</Button>
+              <Button onClick={()=>handleClick(item._id)}>Buy</Button>
             </DivDown>
           </Div>
         </Container>

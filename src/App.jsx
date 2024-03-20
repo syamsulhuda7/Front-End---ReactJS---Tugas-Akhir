@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Product from "./pages/Product";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+// import Questionnaire from "./pages/Cart";
 
 function App() {
   return (

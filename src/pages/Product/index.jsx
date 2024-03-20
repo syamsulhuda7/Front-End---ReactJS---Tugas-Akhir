@@ -7,6 +7,7 @@ import FilterProduct from "../../components/FilterProduct";
 import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
 import ProductNotFound from "../../components/ProductNotFound";
+import PopUpProduct from "../../components/PopUpProduct";
 
 function Product() {
   const [getData, setGetData] = useState([]);
@@ -14,7 +15,9 @@ function Product() {
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState([]);
   const [skip, setSkip] = useState(0);
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('');
+  const [idValue, setIdValue] = useState('');
+  const [showPopUp, setShowPopUp] = useState(false);
 
 
   useEffect(() => {
@@ -35,8 +38,6 @@ function Product() {
     fetchData();
   }, [skip]);
 
-
-console.log(inputValue)
   // Pencarian
   useEffect(() => {
     if (inputValue != '') {
@@ -90,7 +91,7 @@ console.log(inputValue)
                   <h1 style={{ padding: "20px 50px", paddingBottom: "0px" }}>
                     Product List
                   </h1>
-                  <CardProduct
+                  <CardProduct nilaiId={setIdValue} popUp={setShowPopUp}
                     data={searchResult.length > 0 ? searchResult : getData}
                   ></CardProduct>
                 </div>
@@ -100,6 +101,10 @@ console.log(inputValue)
           </div>
         </div>
       )}
+      <>
+      {showPopUp === true && <PopUpProduct closePopUp={setShowPopUp} idValue={idValue}/>
+}
+      </>
     </>
   );
 }
