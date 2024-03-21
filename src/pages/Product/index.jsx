@@ -15,10 +15,11 @@ function Product() {
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState([]);
   const [skip, setSkip] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [idValue, setIdValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [idValue, setIdValue] = useState("");
   const [showPopUp, setShowPopUp] = useState(false);
-
+  const [filterValue, setFilterValue] = useState([]);
+  const [filterGenerator, setFilterGenerator] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,14 +41,14 @@ function Product() {
 
   // Pencarian
   useEffect(() => {
-    if (inputValue != '') {
+    if (inputValue != "") {
       const fetchData = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/products?q=${inputValue}`
+            `http://localhost:3000/api/products?limit=100&q=${inputValue}`
           );
-          if(response.data.count == 0 || response.data.count == '') {
-            setSearchResult('x')
+          if (response.data.count == 0 || response.data.count == "") {
+            setSearchResult("x");
           } else {
             setSearchResult(response.data.data);
           }
@@ -55,11 +56,12 @@ function Product() {
           console.log("Eror fetching data", err);
         }
       };
-  
+
       fetchData();
     }
-  
-}, [inputValue]);
+  }, [inputValue]);
+
+  console.log(filterValue);
 
   return (
     <>
@@ -72,38 +74,91 @@ function Product() {
       {loading ? (
         <Loading />
       ) : (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <FilterProduct />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              width: "1220px",
-              height: "auto",
-            }}
-          >
-            {searchResult == "x" ? (
-              <ProductNotFound inputValue={inputValue} />
-            ) : (
-              <>
-                <div>
-                  <h1 style={{ padding: "20px 50px", paddingBottom: "0px" }}>
-                    Product List
-                  </h1>
-                  <CardProduct nilaiId={setIdValue} popUp={setShowPopUp}
-                    data={searchResult.length > 0 ? searchResult : getData}
-                  ></CardProduct>
+        <>
+          {filterGenerator ? (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <FilterProduct onGenerator={setFilterGenerator} onSend={setFilterValue} />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    width: "1220px",
+                    height: "auto",
+                  }}
+                >
+                  {searchResult == "x" ? (
+                    <ProductNotFound inputValue={inputValue} />
+                  ) : (
+                    <>
+                      <div>
+                        <h1
+                          style={{ padding: "20px 50px", paddingBottom: "0px" }}
+                        >
+                          Product List
+                        </h1>
+                        <CardProduct
+                          nilaiId={setIdValue}
+                          popUp={setShowPopUp}
+                          data={filterValue}
+                        ></CardProduct>
+                      </div>
+                    </>
+                  )}
                 </div>
-                {searchResult.length > 0 || <Pagination skip={skip} setSkip={setSkip} rawData={rawData} />}
-              </>
-            )}
-          </div>
-        </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <FilterProduct onGenerator={setFilterGenerator} onSend={setFilterValue} />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    width: "1220px",
+                    height: "auto",
+                  }}
+                >
+                  {searchResult == "x" ? (
+                    <ProductNotFound inputValue={inputValue} />
+                  ) : (
+                    <>
+                      <div>
+                        <h1
+                          style={{ padding: "20px 50px", paddingBottom: "0px" }}
+                        >
+                          Product List
+                        </h1>
+                        <CardProduct
+                          nilaiId={setIdValue}
+                          popUp={setShowPopUp}
+                          data={
+                            searchResult.length > 0 ? searchResult : getData
+                          }
+                        ></CardProduct>
+                      </div>
+                      {searchResult.length > 0 || (
+                        <Pagination
+                          skip={skip}
+                          setSkip={setSkip}
+                          rawData={rawData}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </>
       )}
       <>
-      {showPopUp === true && <PopUpProduct closePopUp={setShowPopUp} idValue={idValue}/>
-}
+        {showPopUp === true && (
+          <PopUpProduct closePopUp={setShowPopUp} idValue={idValue} />
+        )}
       </>
     </>
   );

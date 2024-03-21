@@ -31,6 +31,7 @@ function InputSearch({ inputValue }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     inputValue(searchInput);
+    setSearchInput("")
   };
 
   return (
