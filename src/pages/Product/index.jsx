@@ -8,157 +8,93 @@ import Loading from "../../components/Loading";
 import Pagination from "../../components/Pagination";
 import ProductNotFound from "../../components/ProductNotFound";
 import PopUpProduct from "../../components/PopUpProduct";
+import Notification from "../../components/Notification";
+import store from "../../app/features/store";
 
 function Product() {
   const [getData, setGetData] = useState([]);
-  const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState([]);
   const [skip, setSkip] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [idValue, setIdValue] = useState("");
   const [showPopUp, setShowPopUp] = useState(false);
-  const [filterValue, setFilterValue] = useState([]);
-  const [filterGenerator, setFilterGenerator] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [tag, setTag] = useState([]);
+  const [submit, setSubmit] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const categoryParams = category.map((category) => `category=${category}`).join("&");
+        const tagParams = tag.map((tag) => `tags[]=${tag}`).join("&");
         const response = await axios.get(
-          `http://localhost:3000/api/products?skip=${skip}`
+          `http://localhost:3000/api/products?q=${inputValue}&skip=${skip}&${categoryParams}&${tagParams}`
         );
-        setGetData(response.data.data);
         setRawData(response.data);
+        if (response.data.count === 0 || !response.data.data.length) {
+          setGetData("x");
+        } else {
+          setGetData(response.data.data);
+        }
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
-  }, [skip]);
+  }, [skip, inputValue, submit]);
 
-  // Pencarian
   useEffect(() => {
-    if (inputValue != "") {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:3000/api/products?limit=100&q=${inputValue}`
-          );
-          if (response.data.count == 0 || response.data.count == "") {
-            setSearchResult("x");
-          } else {
-            setSearchResult(response.data.data);
-          }
-        } catch (err) {
-          console.log("Eror fetching data", err);
-        }
-      };
+    const unsubscribe = store.subscribe(() => {
+        setShowNotification(true)
+        setTimeout(() => {
+          setShowNotification(false);
+        }, 2300);
+    });
 
-      fetchData();
-    }
-  }, [inputValue]);
-
-  console.log(filterValue);
+    // Mengembalikan fungsi unsubscribe untuk membersihkan subscribe ketika komponen di-unmount
+    return () => {
+        unsubscribe();
+    };
+  }, [store]);
 
   return (
     <>
+      {showNotification && <Notification/>}
       <div>
         <Navbar inputValue={setInputValue} />
-        <div
-          style={{ height: "65px", width: "100%", backgroundColor: "black" }}
-        ></div>
+        <div style={{ height: "65px", width: "100%", backgroundColor: "black" }}></div>
       </div>
-      {loading ? (
-        <Loading />
+      {loading ? (<Loading />
       ) : (
         <>
-          {filterGenerator ? (
             <>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <FilterProduct onGenerator={setFilterGenerator} onSend={setFilterValue} />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    width: "1220px",
-                    height: "auto",
-                  }}
-                >
-                  {searchResult == "x" ? (
-                    <ProductNotFound inputValue={inputValue} />
+                <FilterProduct sendSubmit={setSubmit} sendCategory={setCategory} sendTag={setTag}  />
+                <div style={{display: "flex",flexDirection: "column",justifyContent: "space-between",width: "1220px",height: "auto",}}>
+
+                  {getData == "x" ? (<ProductNotFound inputValue={inputValue} />
                   ) : (
                     <>
                       <div>
-                        <h1
-                          style={{ padding: "20px 50px", paddingBottom: "0px" }}
-                        >
-                          Product List
-                        </h1>
-                        <CardProduct
-                          nilaiId={setIdValue}
-                          popUp={setShowPopUp}
-                          data={filterValue}
-                        ></CardProduct>
+                        <h1 style={{ padding: "20px 50px", paddingBottom: "0px" }}>Product List</h1>
+                        <CardProduct nilaiId={setIdValue} popUp={setShowPopUp} data={getData}></CardProduct>
                       </div>
+
+                      {getData.length > 0 && (<Pagination skip={skip} setSkip={setSkip} rawData={rawData} />)}
                     </>
                   )}
                 </div>
               </div>
             </>
-          ) : (
-            <>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <FilterProduct onGenerator={setFilterGenerator} onSend={setFilterValue} />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    width: "1220px",
-                    height: "auto",
-                  }}
-                >
-                  {searchResult == "x" ? (
-                    <ProductNotFound inputValue={inputValue} />
-                  ) : (
-                    <>
-                      <div>
-                        <h1
-                          style={{ padding: "20px 50px", paddingBottom: "0px" }}
-                        >
-                          Product List
-                        </h1>
-                        <CardProduct
-                          nilaiId={setIdValue}
-                          popUp={setShowPopUp}
-                          data={
-                            searchResult.length > 0 ? searchResult : getData
-                          }
-                        ></CardProduct>
-                      </div>
-                      {searchResult.length > 0 || (
-                        <Pagination
-                          skip={skip}
-                          setSkip={setSkip}
-                          rawData={rawData}
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
         </>
       )}
       <>
-        {showPopUp === true && (
-          <PopUpProduct closePopUp={setShowPopUp} idValue={idValue} />
-        )}
+        {showPopUp === true && (<PopUpProduct closePopUp={setShowPopUp} idValue={idValue} />)}
       </>
     </>
   );

@@ -1,9 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -28,26 +24,38 @@ const DivLabel = styled.div`
   align-items: center;
   padding: 8px 15px;
 `;
+const Button = styled.button`
+  padding: 7px 15px;
+  margin: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%;
+  background-color: #fff1a2;
+  border: transparent;
+  cursor: pointer;
+  transition: all .1s ease-in-out;
+  &:hover {
+    background-color: #b19700;
+    color: white;
+  }
+`
 
-function FilterProduct({ onSend, onGenerator }) {
-  const [submit, setSubmit] = useState(0);
+function FilterProduct({ sendSubmit, sendCategory, sendTag }) {
   const [categoryValues, setCategoryValues] = useState([]);
   const [tagValues, setTagValues] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [tag, setTag] = useState([]);
-  // const [filter, setFilter] = useState([])
 
   const handleCategoryChecked = (event) => {
     const { name, checked } = event.target;
     // Menggabungkan nilai terbaru dengan prevState menggunakan spread operator
     const updatedCategoryValue = { ...categoryValues, [name]: checked };
     setCategoryValues(updatedCategoryValue);
+    console.log(categoryValues)
 
     // Mendapatkan array dari name yang bernilai true
     const trueNames = Object.keys(updatedCategoryValue).filter(
       (key) => updatedCategoryValue[key]
     );
-    setCategory(trueNames);
+    sendCategory(trueNames)
   };
 
   const handleTagChecked = (event) => {
@@ -60,34 +68,26 @@ function FilterProduct({ onSend, onGenerator }) {
     const trueNames = Object.keys(updatedTagValue).filter(
       (key) => updatedTagValue[key]
     );
-    setTag(trueNames);
+    sendTag(trueNames)
   };
-
-  // category.map(x => console.log(x))
-
-  const fetchData = async () => {
-    try {
-      const categoryParams = category
-        .map((category) => `category=${category}`)
-        .join("&");
-      const tagParams = tag.map((tag) => `tags[]=${tag}`).join("&");
-      const url = `http://localhost:3000/api/products?limit=100&${categoryParams}&${tagParams}`;
-      const response = await axios.get(url);
-      onSend(response.data.data);
-    } catch (err) {
-      console.log("Eror fetching data", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [submit]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmit((page) => page + 1);
-    onGenerator(true)
+    sendSubmit((page) => page + 1)
   };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setCategoryValues({});
+    setTagValues({});
+    sendCategory([]);
+    sendTag([]);
+    // Reset semua nilai checkbox menjadi tidak tercentang
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+  }
 
   return (
     <Container>
@@ -216,7 +216,8 @@ function FilterProduct({ onSend, onGenerator }) {
             <Label htmlFor="vegetable">Vegetable</Label>
           </DivLabel>
         </div>
-        <button type="submit">Kirim</button>
+        <Button type="submit">Filter</Button>
+        <Button onClick={handleClick}>Reset</Button>
       </form>
     </Container>
   );

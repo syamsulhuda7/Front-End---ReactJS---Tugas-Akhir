@@ -1,23 +1,15 @@
 import * as counter from './constants';
 
-export const increment = (value) => {
+export const addProduct = (value) => {
     return {
-        type: counter.INC,
-        value: value
+        type: counter.ADDPRODUCT,
+        payload: value
     }
 }
 
-export const decrement = (value) => {
+export const minQty = (value) => {
     return {
-        type: counter.DEC,
-        value: value
-    }
-}
-
-export const decrementWithCheckingAction = (value) => {
-    return (dispatch, getState) => {
-        if (getState().counter.count > 1) {
-            dispatch(decrement(value))
-        }
+        type: counter.MINQTY,
+        payload: value
     }
 }

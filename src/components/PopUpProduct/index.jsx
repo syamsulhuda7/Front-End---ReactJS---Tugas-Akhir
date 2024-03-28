@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Counter from "./Counter";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../../app/features/Counter/actions";
 
 const SuperContainer = styled.div`
   height: 100%;
@@ -76,7 +78,7 @@ const Close = styled.button`
 `
 
 function PopUpProduct({idValue, closePopUp}) {
-
+    const [count, setCount] = useState(0);
     const [idResult, setIdResult] = useState({});
 
     useEffect(() => {
@@ -97,8 +99,20 @@ function PopUpProduct({idValue, closePopUp}) {
       
     }, [idValue]);
 
+
+const dispatch = useDispatch()
+
 const handleClick = () => {
-  closePopUp(false)
+  closePopUp(false);
+}
+
+const handleAdd = () => {
+  // e.preventDefault()
+  if (count > 0) {
+    dispatch(addProduct({qty:`${count}`, name:`${idResult.name}`, id:`${idResult._id}`, img:`${idResult.image_url}`}));
+    setCount(0)
+    closePopUp(false);
+  }
 }
 
   return (
@@ -115,8 +129,8 @@ const handleClick = () => {
         <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'30px 0px'}}>
             <h2>Stock : {idResult.stock}</h2>
             <div style={{display:'flex', alignItems:'center', gap:'20px'}}>
-                    <Counter/>
-                <Add onClick={handleClick}>add to cart</Add>
+                    <Counter setCount={setCount} count={count}/>
+                <Add onClick={handleAdd}>add to cart</Add>
             </div>
         </div>
       </Container>

@@ -1,2 +1,2 @@
-export const INC = 'INC';
-export const DEC = 'DEC';
+export const ADDPRODUCT = 'ADDPRODUCT';
+export const MINQTY = 'MINQTY';

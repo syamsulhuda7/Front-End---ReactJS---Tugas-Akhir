@@ -1,62 +1,53 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CardCart from "../../components/CardCart";
+import styled from "styled-components";
 
-function Questionnaire() {
-  // State untuk menyimpan jawaban dari pengguna
-  const [answer, setAnswer] = useState('');
+const Back = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  padding: 10px;
 
-  // Fungsi untuk menangani perubahan jawaban
-  const handleAnswerChange = (event) => {
-    setAnswer(event.target.value);
-  };
+  &:hover {
+    color: gold;
+  }
+`;
+const Header = styled.div`
+  width: 100%;
+  font-weight: bold;
+  color: white;
+  height: 50px;
+  border-bottom: 3px solid black;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 50px;
+`;
+const Div = styled.div`
+  width: 250px;
+  display: flex;
+  justify-content: center;
+`;
 
-  // Fungsi untuk menangani pengiriman jawaban
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Lakukan sesuatu dengan jawaban, misalnya kirim ke server atau simpan di state induk
-    console.log('Jawaban Anda:', answer);
-  };
+function Cart() {
+  const navigate = useNavigate();
 
   return (
-    <div>
-      <h2>Kuisioner</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{}}>
-          <label>
-            <input
-              type="radio"
-              value="1"
-              checked={answer === '1'}
-              onChange={handleAnswerChange}
-            />
-            Pilihan 1
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="option2"
-              checked={answer === 'option2'}
-              onChange={handleAnswerChange}
-            />
-            Pilihan 2
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="option3"
-              checked={answer === 'option3'}
-              onChange={handleAnswerChange}
-            />
-            Pilihan 3
-          </label>
-        </div>
-        <button type="submit">Kirim Jawaban</button>
-      </form>
-    </div>
+    <>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Back onClick={() => navigate("/product")}> - back to Product </Back>
+      </div>
+      <Header>
+        <Div>IMAGE</Div>
+        <Div>NAME</Div>
+        <Div>QUANTITY</Div>
+        <Div>DELETE</Div>
+      </Header>
+      <CardCart />
+    </>
   );
 }
 
-export default Questionnaire;
+export default Cart;

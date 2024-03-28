@@ -81,7 +81,7 @@ function Navbar({inputValue}) {
         <Div>
           <InputSearch inputValue={inputValue}/>
           <Login>Log In</Login>
-          <Img src="src/assets/cart.png" />
+          <Img onClick={()=>navigate('/cart')} src="src/assets/cart.png" />
         </Div>
       </SNavbar>
     </>

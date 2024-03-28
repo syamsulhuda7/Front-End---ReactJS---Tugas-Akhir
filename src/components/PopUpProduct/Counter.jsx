@@ -1,6 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+// import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { decrementWithCheckingAction, increment } from "../../app/features/Counter/actions";
+// import { decrementWithCheckingAction, increment } from "../../app/features/Counter/actions";
+// import { useState } from "react";
 
 const Button = styled.button`
   height: 30px;
@@ -21,16 +23,23 @@ const Button = styled.button`
   }
 `;
 
-function Counter() {
-
-  let { count } = useSelector((state) => state.counter);
-  const dispatch = useDispatch();
+function Counter({setCount, count}) {
+  const handleplus = () => {
+    setCount((count) => count + 1);
+  }
+  const handlemin = () => {
+    if (count > 0) {
+      setCount((count) => count - 1);
+    }
+  }
+  // let { cart } = useSelector((state) => state.counter);
+  // const dispatch = useDispatch();
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <Button onClick={()=> dispatch(decrementWithCheckingAction(1))}>-</Button>
+      <Button onClick={handlemin}>-</Button>
       <p>{count}</p>
-      <Button onClick={()=> dispatch(increment(1))}>+</Button>
+      <Button onClick={handleplus}>+</Button>
     </div>
   );
 }
