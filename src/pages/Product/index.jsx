@@ -42,6 +42,7 @@ function Product() {
         console.log(error);
       } finally {
         setLoading(false);
+        setInputValue('')
       }
     };
   

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -61,6 +62,21 @@ const ImgCategory = styled.img`
 `;
 
 function CategoryProduct() {
+
+  const navigate = useNavigate();
+
+  const scrollTop = () => {
+    scrollTo({
+        behavior: 'instant',
+        top: '0'
+    })
+  }
+
+  const handleClick = () => {
+    navigate("/product")
+    scrollTop()
+  }
+
   return (
     <Container>
       <Div>
@@ -69,17 +85,17 @@ function CategoryProduct() {
       </Div>
       <Div style={{ flexDirection: "row", gap: "150px" }}>
         <div>
-          <Img src="src/assets/profile/e.jpg"></Img>
+          <Img onClick={handleClick} src="src/assets/profile/e.jpg"></Img>
           <DivText>
             <Text>Food</Text>
-            <ImgCategory src="src/assets/arrow.png" />
+            <ImgCategory onClick={handleClick} src="src/assets/arrow.png" />
           </DivText>
         </div>
         <div>
-          <Img src="src/assets/profile/f.jpg"></Img>
+          <Img onClick={handleClick} src="src/assets/profile/f.jpg"></Img>
           <DivText>
             <Text>Drink</Text>
-            <ImgCategory src="src/assets/arrow.png" />
+            <ImgCategory onClick={handleClick} src="src/assets/arrow.png" />
           </DivText>
         </div>
       </Div>
