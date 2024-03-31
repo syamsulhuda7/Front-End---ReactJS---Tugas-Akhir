@@ -40,7 +40,7 @@ const Button = styled.button`
   }
 `
 
-function FilterProduct({ sendSubmit, sendCategory, sendTag }) {
+function FilterProduct({ sendInputValue, sendSubmit, sendCategory, sendTag }) {
   const [categoryValues, setCategoryValues] = useState([]);
   const [tagValues, setTagValues] = useState([]);
 
@@ -73,7 +73,8 @@ function FilterProduct({ sendSubmit, sendCategory, sendTag }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendSubmit((page) => page + 1)
+    sendInputValue('');
+    sendSubmit((page) => page + 1);
   };
 
   const handleClick = (e) => {

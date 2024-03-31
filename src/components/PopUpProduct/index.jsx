@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
 import Counter from "./Counter";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../app/features/Counter/actions";
 
 const SuperContainer = styled.div`
@@ -106,14 +107,54 @@ const handleClick = () => {
   closePopUp(false);
 }
 
-const handleAdd = () => {
-  // e.preventDefault()
+const token = useSelector(state => state.account.account.token)
+
+const handleAdd = async () => {
   if (count > 0) {
-    dispatch(addProduct({qty:`${count}`, name:`${idResult.name}`, id:`${idResult._id}`, img:`${idResult.image_url}`}));
-    setCount(0)
-    closePopUp(false);
+    // Periksa apakah token ditemukan sebelum menyertakannya dalam header permintaan
+    if (!token) {
+      console.error('Token otentikasi tidak ditemukan.');
+      alert('Anda harus login terlebih dahulu')
+      return;
+    }
+    
+    // Setel header Authorization dengan token otentikasi
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    // Buat objek konfigurasi untuk permintaan Axios
+    const config = {
+      headers: headers
+    };
+
+    // Buat objek item keranjang dari idResult
+    const cartItem = {
+      product: {_id: idResult._id},
+      qty: count
+    };
+    
+    // Kirim permintaan untuk memperbarui keranjang dengan item yang dipilih
+    try {
+      const response = await axios.put(
+        'http://localhost:3000/api/carts',
+        { items: [cartItem] }, // Masukkan item keranjang ke dalam array
+        config // Gunakan objek konfigurasi untuk menyertakan header dengan token otentikasi
+      );
+      console.log('Berhasil memperbarui keranjang:', response.data);
+      // Tindakan lanjutan setelah berhasil memperbarui keranjang
+      // Menambahkan item ke keranjang dengan menggunakan aksi addProduct
+      dispatch(addProduct({ qty: count, name: idResult.name, id: idResult._id, img: idResult.image_url, price: idResult.price }));
+      setCount(0);
+      closePopUp(false);
+    } catch (error) {
+      console.error('Gagal memperbarui keranjang:', error);
+      // Tindakan lanjutan jika gagal memperbarui keranjang
+    }
   }
-}
+};
+
+
 
   return (
     <SuperContainer>

@@ -42,8 +42,10 @@ function Cart() {
       <Header>
         <Div>IMAGE</Div>
         <Div>NAME</Div>
+        <Div>PRICE</Div>
         <Div>QUANTITY</Div>
-        <Div>DELETE</Div>
+        <Div>TOTAL</Div>
+        <Div style={{width:'100px'}}>DELETE</Div>
       </Header>
       <CardCart />
     </>

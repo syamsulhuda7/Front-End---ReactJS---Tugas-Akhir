@@ -82,7 +82,7 @@ function CardProduct({ data, nilaiId, popUp }) {
               <div style={{display:'flex', justifyContent:'center'}}>
                 <h3>{item.name.toUpperCase()}</h3>
               </div>
-              <p style={{ color: "rgb(0,0,0,.7)" }}>{item.description}</p>
+              <p style={{ color: "rgb(0,0,0,.7)", textAlign:'justify' }}>{item.description}</p>
             </DivUp>
             <DivDown>
               <DivHarga>

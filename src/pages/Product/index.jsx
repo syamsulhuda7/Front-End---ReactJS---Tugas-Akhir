@@ -42,7 +42,6 @@ function Product() {
         console.log(error);
       } finally {
         setLoading(false);
-        setInputValue('')
       }
     };
   
@@ -75,7 +74,7 @@ function Product() {
         <>
             <>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <FilterProduct sendSubmit={setSubmit} sendCategory={setCategory} sendTag={setTag}  />
+                <FilterProduct sendInputValue={setInputValue} sendSubmit={setSubmit} sendCategory={setCategory} sendTag={setTag}  />
                 <div style={{display: "flex",flexDirection: "column",justifyContent: "space-between",width: "1220px",height: "auto",}}>
 
                   {getData == "x" ? (<ProductNotFound inputValue={inputValue} />

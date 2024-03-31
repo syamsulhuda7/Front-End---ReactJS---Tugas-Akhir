@@ -83,8 +83,8 @@ function CardCart() {
         </div>
       ) : (
         <>
-          {carts.map((item) => (
-            <Container key={item.id}>
+          {carts.map((item, i) => (
+            <Container key={i}>
               <Div>
                 <img
                   style={{ height: "130px", width: "auto", margin: "10px" }}
@@ -93,6 +93,7 @@ function CardCart() {
                 />
               </Div>
               <Div style={{ fontSize: "20px" }}>{item.name}</Div>
+              <Div style={{ fontSize: "20px" }}>{item.price}</Div>
               <Div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
@@ -110,7 +111,8 @@ function CardCart() {
                   +
                 </Button>
               </Div>
-              <Div>
+              <Div style={{ fontSize: "20px", fontWeight:'bold' }}>Rp {item.price * item.qty}</Div>
+              <Div style={{width:'100px'}}>
                 <Remove onClick={() => handleRemove(item.id)}>remove</Remove>
               </Div>
             </Container>

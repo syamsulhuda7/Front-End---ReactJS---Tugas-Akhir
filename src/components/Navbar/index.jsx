@@ -2,6 +2,10 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import InputSearch from "./InputSearch";
+// import { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const SNavbar = styled.div`
   width: 100%;
@@ -34,14 +38,13 @@ const H5 = styled.h3`
   font-weight: lighter;
   margin: 0;
   cursor: pointer;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-        scale: 115%;
-        font-weight: normal;
-    }
+    scale: 115%;
+    font-weight: normal;
+  }
 `;
-
 
 const Login = styled.button`
   padding: 6px 15px;
@@ -50,11 +53,11 @@ const Login = styled.button`
   border: 2px solid white;
   color: white;
   cursor: pointer;
-  transition: all .2s ease-in-out;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  transition: all 0.2s ease-in-out;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 
   &:hover {
-    background-color: rgba(255,255,255,.2);
+    background-color: rgba(255, 255, 255, 0.2);
     scale: 103%;
   }
 `;
@@ -65,23 +68,52 @@ const Img = styled.img`
   cursor: pointer;
 `;
 
-function Navbar({inputValue}) {
+function Navbar({ inputValue }) {
+  // const [name, setName] = useState("");
+  // const [token, setToken] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/auth/logout",
+        {}, // Jangan lupa menyertakan objek kosong sebagai body
+        {
+          headers: {
+            Authorization:
+              `Bearer ${acc.token}`
+          },
+        }
+      );
+      console.log(response.data);
+      localStorage.removeItem('account');
+      window.location.replace('/login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const acc = useSelector(state => state.account.account)
+  // console.log(acc)
+  // console.log(acc.length)
+  // console.log(acc.account)
+  // console.log(acc.account.length)
 
   return (
     <>
       <SNavbar>
         <H1>SCAFE</H1>
-        <Div style={{gap:'70px'}}>
-          <H5 onClick={()=>navigate('/')}>Home</H5>
-          <H5 onClick={()=>navigate('/product')}>Product</H5>
-          <H5 onClick={()=>navigate('/profile')}>Profile</H5>
+        <Div style={{ gap: "70px" }}>
+          <H5 onClick={() => navigate("/")}>Home</H5>
+          <H5 onClick={() => navigate("/product")}>Product</H5>
+          <H5 onClick={() => navigate("/profile")}>Profile</H5>
         </Div>
         <Div>
-          <InputSearch inputValue={inputValue}/>
-          <Login onClick={()=>navigate('/login')}>Log In</Login>
-          <Img onClick={()=>navigate('/cart')} src="src/assets/cart.png" />
+          <InputSearch inputValue={inputValue} />
+          {acc.id ? (<Login onClick={logout}>Log Out</Login>
+          ):(<Login onClick={() => navigate("/login")}>Log In</Login>)}
+          <Img onClick={() => navigate("/cart")} src="src/assets/cart.png" />
         </Div>
       </SNavbar>
     </>

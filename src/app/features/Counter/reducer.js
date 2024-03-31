@@ -27,7 +27,8 @@ const counterReducer = (state = initialState, action) => {
                     id: product.id,
                     name: product.name,
                     img: product.img,
-                    qty: product.qty
+                    qty: product.qty,
+                    price: product.price
                 };
                 const updatedCarts = [...state.carts, newProduct];
                 const newState = { ...state, carts: updatedCarts };
