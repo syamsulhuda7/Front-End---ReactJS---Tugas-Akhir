@@ -1,7 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { addProduct, minQty } from "../../app/features/Counter/actions";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
@@ -47,48 +48,131 @@ const Remove = styled.button`
   }
 `;
 
-function CardCart() {
-  const [id, setId] = useState(null); // Menyimpan ID item yang akan dihapus
-  const carts = useSelector((state) => state.counter.carts);
-  const dispatch = useDispatch();
+function CardCart({sendId}) {
+  const [id, setId] = useState(''); // Menyimpan ID item yang akan dihapus
+  const [cartsBackEnd, setCartsBackEnd] = useState([]); // Menyimpan ID item yang akan dihapus
+  // const carts = useSelector((state) => state.counter.carts);
 
-  const handleRemove = (itemId) => {
-    setId(itemId); // Menyimpan ID item yang akan dihapus
+  // const handleRemove = (itemId) => {
+  //   setId(itemId); // Menyimpan ID item yang akan dihapus
+  // };
+
+  // // Efek samping untuk menangani penghapusan item dari local storage
+  // useEffect(() => {
+  //   if (id) {
+  //     // Ambil counterState dari localStorage
+  //     let counterState = JSON.parse(localStorage.getItem("counterState"));
+
+  //     // Lakukan operasi penghapusan pada item dengan ID yang sesuai
+  //     counterState.carts = counterState.carts.filter((e) => e.id !== id);
+
+  //     // Simpan kembali counterState yang telah diperbarui ke localStorage
+  //     localStorage.setItem("counterState", JSON.stringify(counterState));
+
+  //     // Reset nilai id setelah penghapusan item
+  //     setId(null);
+
+  //     window.location.reload();
+  //   }
+  // }, [id]);
+
+  // FROM BACK-END
+  
+  const token = useSelector(state => state.account.account.token)
+
+  useEffect(() => {
+    const response = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/carts`, {
+              headers: {
+                'Authorization': `Bearer ${token}` // Menambahkan token ke header permintaan
+              }
+            });
+          setCartsBackEnd(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+    };
+
+    response();
+  }, [id]);
+
+  const handleMin = async (productId, productQty) => {
+    console.log(productId)
+    console.log(productQty)
+    if (productId && productQty>0) {
+      try {
+        const response = await axios.put(
+          'http://localhost:3000/api/carts',
+          { items: [{ product: { _id: productId }, qty: -1 }] },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}` // Menambahkan token ke header permintaan
+            }
+          }
+          );
+          setId(a => a+1)
+          sendId(a => a+1)
+        setCartsBackEnd(response.data);
+      } catch (error) {
+      console.log(error)
+      }
+    }
   };
 
-  // Efek samping untuk menangani penghapusan item dari local storage
-  useEffect(() => {
-    if (id) {
-      // Ambil counterState dari localStorage
-      let counterState = JSON.parse(localStorage.getItem("counterState"));
-
-      // Lakukan operasi penghapusan pada item dengan ID yang sesuai
-      counterState.carts = counterState.carts.filter((e) => e.id !== id);
-
-      // Simpan kembali counterState yang telah diperbarui ke localStorage
-      localStorage.setItem("counterState", JSON.stringify(counterState));
-
-      // Reset nilai id setelah penghapusan item
-      setId(null);
-
-      window.location.reload();
+  const handleAdd = async (productId) => {
+    if (productId) {
+      try {
+        const response = await axios.put(
+          'http://localhost:3000/api/carts',
+          { items: [{ product: { _id: productId }, qty: 1 }] },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}` // Menambahkan token ke header permintaan
+            }
+          }
+          );
+          setId(a => a+1)
+          sendId(a => a+1)
+        setCartsBackEnd(response.data);
+      } catch (error) {
+      console.log(error)
+      }
     }
-  }, [id]);
+  };
+
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await axios.delete('http://localhost:3000/api/carts', {
+        data: { productId }, // Kirim ID produk sebagai data dalam req.body
+        headers: {
+          'Authorization': `Bearer ${token}` // Tambahkan token ke header permintaan
+        }
+      });
+      setId(a => a+1)
+      sendId(a => a+1)
+      console.log(response.data);
+      // Lakukan tindakan lain setelah berhasil menghapus produk dari keranjang
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
 
   return (
     <>
-      {carts.length == 0 ? (
+      {cartsBackEnd.length == 0 ? (
         <div style={{height:'70vh', width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
           <h1>Kamu belum menambahkan produk apapun</h1>
         </div>
       ) : (
         <>
-          {carts.map((item, i) => (
+          {cartsBackEnd.map((item, i) => (
             <Container key={i}>
               <Div>
                 <img
                   style={{ height: "130px", width: "auto", margin: "10px" }}
-                  src={`http://localhost:3000/images/products/${item.img}`}
+                  src={`http://localhost:3000/images/products/${item.image_url}`}
                   alt=""
                 />
               </Div>
@@ -98,22 +182,20 @@ function CardCart() {
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
                 <Button
-                  onClick={() => dispatch(minQty({ qty: 1, id: `${item.id}` }))}
+                  onClick={() => handleMin(item.product._id, item.qty)}
                 >
                   -
                 </Button>
                 <p>{item.qty}</p>
                 <Button
-                  onClick={() =>
-                    dispatch(addProduct({ qty: 1, id: `${item.id}` }))
-                  }
+                  onClick={() => handleAdd(item.product._id)}
                 >
                   +
                 </Button>
               </Div>
               <Div style={{ fontSize: "20px", fontWeight:'bold' }}>Rp {item.price * item.qty}</Div>
               <Div style={{width:'100px'}}>
-                <Remove onClick={() => handleRemove(item.id)}>remove</Remove>
+                <Remove onClick={() => deleteProduct(item.product._id)} >remove</Remove>
               </Div>
             </Container>
           ))}

@@ -95,10 +95,18 @@ function Navbar({ inputValue }) {
   };
 
   const acc = useSelector(state => state.account.account)
-  // console.log(acc)
-  // console.log(acc.length)
-  // console.log(acc.account)
-  // console.log(acc.account.length)
+
+  const scrollTop = () => {
+    scrollTo({
+        behavior: 'instant',
+        top: '0'
+    })
+  }
+
+  const toCart = () => {
+    navigate("/cart")
+    scrollTop()
+  }
 
   return (
     <>
@@ -113,7 +121,7 @@ function Navbar({ inputValue }) {
           <InputSearch inputValue={inputValue} />
           {acc.id ? (<Login onClick={logout}>Log Out</Login>
           ):(<Login onClick={() => navigate("/login")}>Log In</Login>)}
-          <Img onClick={() => navigate("/cart")} src="src/assets/cart.png" />
+          <Img onClick={toCart} src="src/assets/cart.png" />
         </Div>
       </SNavbar>
     </>
