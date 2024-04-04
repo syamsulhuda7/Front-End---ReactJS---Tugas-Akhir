@@ -51,32 +51,6 @@ const Remove = styled.button`
 function CardCart({sendId}) {
   const [id, setId] = useState(''); // Menyimpan ID item yang akan dihapus
   const [cartsBackEnd, setCartsBackEnd] = useState([]); // Menyimpan ID item yang akan dihapus
-  // const carts = useSelector((state) => state.counter.carts);
-
-  // const handleRemove = (itemId) => {
-  //   setId(itemId); // Menyimpan ID item yang akan dihapus
-  // };
-
-  // // Efek samping untuk menangani penghapusan item dari local storage
-  // useEffect(() => {
-  //   if (id) {
-  //     // Ambil counterState dari localStorage
-  //     let counterState = JSON.parse(localStorage.getItem("counterState"));
-
-  //     // Lakukan operasi penghapusan pada item dengan ID yang sesuai
-  //     counterState.carts = counterState.carts.filter((e) => e.id !== id);
-
-  //     // Simpan kembali counterState yang telah diperbarui ke localStorage
-  //     localStorage.setItem("counterState", JSON.stringify(counterState));
-
-  //     // Reset nilai id setelah penghapusan item
-  //     setId(null);
-
-  //     window.location.reload();
-  //   }
-  // }, [id]);
-
-  // FROM BACK-END
   
   const token = useSelector(state => state.account.account.token)
 
@@ -99,7 +73,6 @@ function CardCart({sendId}) {
   }, [id]);
 
   const handleMin = async (productId, productQty) => {
-    console.log(productId)
     console.log(productQty)
     if (productId && productQty>0) {
       try {
@@ -118,6 +91,9 @@ function CardCart({sendId}) {
       } catch (error) {
       console.log(error)
       }
+    }
+    if (productId && productQty === 1) {
+      deleteProduct(productId)
     }
   };
 

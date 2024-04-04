@@ -10,6 +10,7 @@ import ProductNotFound from "../../components/ProductNotFound";
 import PopUpProduct from "../../components/PopUpProduct";
 import Notification from "../../components/Notification";
 import store from "../../app/features/store";
+import Menu from "../../components/Menu";
 
 function Product() {
   const [getData, setGetData] = useState([]);
@@ -65,6 +66,7 @@ function Product() {
   return (
     <>
       {showNotification && <Notification/>}
+      <Menu/>
       <div>
         <Navbar inputValue={setInputValue} />
         <div style={{ height: "65px", width: "100%", backgroundColor: "black" }}></div>

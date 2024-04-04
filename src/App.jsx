@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import FormAlamat from "./components/FormAlamat";
+import OrderDetail from "./pages/OrderDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/register' element={<Register/>}></Route>
           <Route path='/checkout' element={<Checkout/>}></Route>
           <Route path='/formalamat' element={<FormAlamat/>}></Route>
+          <Route path='/orderdetail' element={<OrderDetail/>}></Route>
         </Routes>
       </Router>
     </>

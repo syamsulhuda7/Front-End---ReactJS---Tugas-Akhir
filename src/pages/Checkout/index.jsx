@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import CheckoutProduct from "../../components/CheckoutProduct"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -37,6 +37,21 @@ const Dback = styled.img`
     font-size: 40px;
     font-weight: bold;
     padding: 10px;
+  `
+  const DivListProduct = styled.div`
+    width: 870px;
+    display: flex;
+    flex-wrap: wrap;
+  `
+  const TotalProduct = styled.div`
+    background-color: black;
+    color: white;
+    height: 60px;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
   `
   const DivSelect = styled.div`
   width: 240px;
@@ -83,30 +98,160 @@ const Dback = styled.img`
     overflow: auto;
     scrollbar-width: none;
   `
-  const DivListProduct = styled.div`
-    width: 870px;
-    display: flex;
-    flex-wrap: wrap;
+  const DivOngkir = styled.div`
+  height: 100px;
+  width: 150px;
+  background-color: white;
+  border: ${props => props.isActive ? '5px solid green' : 'transparent'};;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+  background-color: rgba(255,255,255,.5);
+  }
   `
-  const TotalProduct = styled.div`
-    background-color: black;
-    color: white;
-    height: 60px;
+  const DivOngkirH = styled.div`
+  height: 100px;
+  width: 150px;
+  background-color: white;
+  border: ${props => props.isactiveh ? '5px solid green' : 'transparent'};
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+    background-color: rgba(255,255,255,.5);
+  }
+`;
+
+const DivOngkirR = styled.div`
+  height: 100px;
+  width: 150px;
+  background-color: white;
+  border: ${props => props.isactiver ? '5px solid blue' : 'transparent'};
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+    background-color: rgba(255,255,255,.5);
+  }
+`;
+
+const DivOngkirK = styled.div`
+  height: 100px;
+  width: 150px;
+  background-color: white;
+  border: ${props => props.isactivek ? '5px solid red' : 'transparent'};
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+    background-color: rgba(255,255,255,.5);
+  }
+`;
+
+
+  const Img = styled.img`
+  width: 80px;
+  `
+  const DivOrderDetail = styled.div`
+  width: 500px;
+  height: 400px;
+  background-color: white;
+  border: 3px dashed black;
+  border-radius: 15px;
+  margin: 5px 25px 5px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  `
+  const DivEnd = styled.div`
+  height: 50px;
+  width: 500px;
+  background-color: gold;
+  margin: 30px 10px 10px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+  background-color: #aa9000;
+  color: white;
+  }
+  `
+  const stretchAnimation = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+`;
+  const GoOrderDetail = styled.button`
+    padding: 20px 30px;
+    margin: 20px 10px;
     font-size: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px;
+    animation: ${stretchAnimation} 0.5s infinite alternate;
+    border: transparent;
+    background-color: gold;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+    &:hover{
+      color: white;
+    }
   `
 
 function Checkout () {
   const [carts, setCarts] = useState([])
   // const [popUp, setPopUp] = useState(false)
   const [alamat, setAlamat] = useState([]);
-  const [chooseAlamat, setChooseAlamat] = useState('');
+  // const [chooseAlamat, setChooseAlamat] = useState('');
+  const [isactiveh, setisactiveh] = useState(false);
+  const [isactiver, setisactiver] = useState(false);
+  const [isactivek, setisactivek] = useState(false);
+  const [ongkir, setOngkir] = useState(0);
+  const [orderValue, setOrderValue] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [showDetail, setShowDetail] = useState(false)
 
-const navigate = useNavigate();
-const token = useSelector(state => state.account.account.token)
+  function toNominal(number) {
+    // Pisahkan angka menjadi grup setiap tiga digit dari belakang
+    const parts = number.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    // Gabungkan kembali angka yang sudah dipisahkan dengan titik
+    return parts.join(".");
+}
+
+  const navigate = useNavigate();
+  const token = useSelector(state => state.account.account.token)
 
   useEffect(() => {
     const response = async () => {
@@ -118,7 +263,6 @@ const token = useSelector(state => state.account.account.token)
               }
             });
           setAlamat(response.data.data);
-          console.log(response.data.data);
         } catch (error) {
           console.log(error);
         }
@@ -137,7 +281,6 @@ const token = useSelector(state => state.account.account.token)
                 }
               });
             setCarts(response.data);
-            console.log(response.data);
           } catch (error) {
             console.log(error);
           }
@@ -150,15 +293,86 @@ const token = useSelector(state => state.account.account.token)
   const totalPerProduct = carts.map(item => parseInt(item.price)*parseInt(item.qty))
   const totalPrice = totalPerProduct.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  const handleChange = (e) => {
-    const {value} = e.target;
-    setChooseAlamat(value)
-    console.log(value)
+  const handleChange = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+    console.log(selectedOptions.map(id => alamat.find(item => item._id === id)))
+    setSelectedIds(selectedOptions.map(id => alamat.find(item => item._id === id)))
+    // setSelectedIds(selectedOptions); // Perbarui ID yang dipilih
+};
+  // {
+  //   const {value} = e.target;
+  //   console.log(value)
+  //   setChooseAlamat(value)
+  // }
+
+  const toggleButtonH = () => {
+    setisactiveh(true);
+    setisactiver(false);
+    setisactivek(false);
+    setOngkir(10000);
+  };  
+  const toggleButtonR = () => {
+    setisactiver(true);
+    setisactiveh(false)
+    setisactivek(false)
+    setOngkir(15000)
+  };
+  const toggleButtonK = () => {
+    setisactivek(true);
+    setisactiveh(false)
+    setisactiver(false)
+    setOngkir(20000)
+  };
+  const handleBRI = () => {
+    setPaymentMethod('Bank BRI')
+  }
+  const handleSPAY = () => {
+    setPaymentMethod('Shopeepay')
   }
 
-  // const handleAddress = () => {
-  //   setPopUp(true)
-  // }
+  const order = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await axios.post('http://localhost:3000/api/orders', {
+          delivery_fee: ongkir,
+          delivery_address: selectedIds[0],
+          payment_method: paymentMethod
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+          if (!selectedIds[0]) {
+            console.error('Alamat pengiriman belum dipilih!');
+            return;
+          }
+        setOrderValue(response.data)
+        console.log(orderValue)
+        if (response.data.error == 1) {
+            // setError(response.data.error);
+            console.log(response.data.error);
+        } else if (response.data.error != 1) {
+            alert('Order berhasil dibuat 👌')
+            window.location.replace('/orderdetail');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+  };
+
+  const scrollTop = () => {
+    scrollTo({
+        behavior: 'smooth',
+        top: '0'
+    })
+  }
+
+  const handleShowDetail = () => {
+    if (selectedIds[0]?.kecamatan && ongkir && paymentMethod) {
+      setShowDetail(true)
+      scrollTop()
+    }
+  }
 
     return (
         <SuperContainer>
@@ -171,13 +385,13 @@ const token = useSelector(state => state.account.account.token)
                 <h1 style={{padding:'15px 30px',fontSize:'40px',borderLeft:'5px solid gold'}}>CHECKOUT</h1>
             </div>
             <Container>
-                <div style={{marginLeft:'30px'}}>
+                <div style={{marginLeft:'30px', borderRight:'5px double black', paddingRight:'30px'}}>
                     <div style={{borderBottom:'5px dotted black',padding:'5px'}}>
                         <Title>Product</Title>
                         <DivListProduct>
                             <CheckoutProduct/>
                         </DivListProduct>
-                        <TotalProduct>Total Product : Rp {totalPrice}</TotalProduct>
+                        <TotalProduct>Total Product : Rp {toNominal(totalPrice)}</TotalProduct>
                     </div>
                     <div>
                         <Title>Shipping address</Title>
@@ -187,8 +401,9 @@ const token = useSelector(state => state.account.account.token)
                           <Select
                             name="Alamat"
                             onChange={handleChange}>
+                            {/* value={selectedIds} */}
                             {alamat.map((item) => (
-                            <option key={item._id} >
+                            <option key={item._id} value={item._id}>
                                 NAMA: {item.name?.toUpperCase()};   
                                 ALAMAT: {item.kelurahan}, {item.kecamatan}, {item.kabupaten}, {item.provinsi};   
                                 DETAIL : {item.detail?.toUpperCase()}
@@ -199,17 +414,96 @@ const token = useSelector(state => state.account.account.token)
                         <p> or </p>
                         <Button onClick={()=>navigate('/formalamat')}> <span style={{fontSize:'30px',margin:'5px 0px 0px 5px'}}>+</span> <br />Add Address</Button>
                         </div>
-                      <DivAlamat>{chooseAlamat}</DivAlamat>
+                        <DivAlamat>
+                        {selectedIds[0]?.kecamatan && 
+                          <>
+                            <span style={{fontWeight:'bold'}}>NAMA : </span>{selectedIds[0]?.name.toUpperCase()}
+                            <br />
+                            <br />
+                            <span style={{fontWeight:'bold'}}>ALAMAT : </span> {selectedIds[0]?.kelurahan.toUpperCase()}, 
+                            {selectedIds[0]?.kecamatan.toUpperCase()}, 
+                            {selectedIds[0]?.kabupaten.toUpperCase()}, 
+                            {selectedIds[0]?.provinsi.toUpperCase()}
+                            <br />
+                            <br />
+                            <span style={{fontWeight:'bold'}}>DETAIL : </span> {selectedIds[0]?.detail.toUpperCase()}
+                          </>
+                        }
+                        </DivAlamat>
                     </div>
                     <Title>Shipping Options</Title>
+                    <div style={{display:'flex',gap:'20px', marginLeft:'10px'}}>
+                    <DivOngkirH isactiveh={isactiveh} onClick={toggleButtonH} style={{color:'green'}}>
+                      <h1>Hemat</h1>
+                      <h3>Rp {toNominal(10000)}</h3>
+                    </DivOngkirH>
+                    <DivOngkirR isactiver={isactiver} onClick={toggleButtonR} style={{color:'blue'}}>
+                      <h1>Reguler</h1>
+                      <h3>Rp {toNominal(15000)}</h3>
+                    </DivOngkirR>
+                    <DivOngkirK isactivek={isactivek} onClick={toggleButtonK} style={{color:'red'}}>
+                      <h1>Kilat</h1>
+                      <h3>Rp {toNominal(20000)}</h3>
+                    </DivOngkirK>
+                    </div>
                     <Title>Payment Method</Title>
+                    <div style={{display:'flex',gap:'15px',margin:'0px 10px 20px'}}>
+                    <DivOngkir onClick={handleBRI}>
+                      <Img src="src/assets/BRI.png" alt="" />
+                    </DivOngkir>
+                    <DivOngkir onClick={handleSPAY}>
+                      <Img src="src/assets/SPAY.png" alt="" />
+                    </DivOngkir>
+                    </div> 
+                        <GoOrderDetail onClick={handleShowDetail}>
+                        Cek Detail Pembayaran!
+                        </GoOrderDetail>
+
                 </div>
-                <div>Order Details</div>
+                <div>
+                  {showDetail && 
+                  <>
+                    <Title>Order Details</Title>
+                    <DivOrderDetail>
+                    <div>
+                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                        <p>Total Produk : </p>
+                        <p>Rp {toNominal(totalPrice)}</p>
+                      </div>
+                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                        <p>Alamat Pengiriman : </p>
+                        <div style={{maxWidth:'300px',textAlign:'right'}}>
+                          NAMA : {selectedIds[0]?.name.toUpperCase()}
+                          <br />
+                          ALAMAT : {selectedIds[0]?.kelurahan.toUpperCase()}, 
+                          {selectedIds[0]?.kecamatan.toUpperCase()}, 
+                          {selectedIds[0]?.kabupaten.toUpperCase()}, 
+                          {selectedIds[0]?.provinsi.toUpperCase()}
+                          <br />
+                          DETAIL : {selectedIds[0]?.detail.toUpperCase()}
+                        </div>
+                      </div>
+                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                        <p>Biaya Pengiriman : </p>
+                        <div style={{maxWidth:'300px',textAlign:'right'}}>Rp {toNominal(ongkir)}</div>
+                      </div>
+                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                        <p>Metode Pembayaran : </p>
+                        <div style={{maxWidth:'300px',textAlign:'right'}}>{paymentMethod}</div>
+                      </div>
+                    </div>
+                    <div style={{padding:'10px',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                      <h3>Total Pembayaran</h3>
+                      <h1>Rp {toNominal(totalPrice+ongkir)}</h1>
+                    </div>
+                    </DivOrderDetail>
+                    <DivEnd onClick={order}>
+                        <div>Buat Pesanan</div>
+                    </DivEnd>
+                  </>
+                  }
+                </div>
             </Container>
-            <div>
-                <div>Total Pembayaran</div>
-                <div>Buat Pesanan</div>
-            </div>
         </SuperContainer>
     )
 }

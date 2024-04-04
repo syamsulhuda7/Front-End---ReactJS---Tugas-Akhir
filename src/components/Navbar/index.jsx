@@ -5,6 +5,7 @@ import InputSearch from "./InputSearch";
 // import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 
 const SNavbar = styled.div`
@@ -67,9 +68,25 @@ const Img = styled.img`
   width: auto;
   cursor: pointer;
 `;
+const Note = styled.div`
+  height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #ffe760;
+    border: 1px solid black;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: black;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+`
 
 function Navbar({ inputValue }) {
-  // const [name, setName] = useState("");
+  const [note, setNote] = useState([]);
   // const [token, setToken] = useState("");
 
   const navigate = useNavigate();
@@ -108,9 +125,31 @@ function Navbar({ inputValue }) {
     scrollTop()
   }
 
+  const token = useSelector(state => state.account.account.token)
+
+  useEffect(() => {
+    const response = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/carts`, {
+              headers: {
+                'Authorization': `Bearer ${token}` // Menambahkan token ke header permintaan
+              }
+            });
+          setNote(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+    };
+
+    response();
+  }, [note]);
+
   return (
     <>
       <SNavbar>
+        {note.length > 0 && <Note>{note.length}</Note>}
         <H1>SCAFE</H1>
         <Div style={{ gap: "70px" }}>
           <H5 onClick={() => navigate("/")}>Home</H5>

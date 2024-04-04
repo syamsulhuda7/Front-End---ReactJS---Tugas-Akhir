@@ -81,8 +81,10 @@ function Cart() {
   }
 
   const toCheckout = () => {
-    navigate("/checkout")
-    scrollTop()
+    if (totalPrice>0) {
+      navigate("/checkout")
+      scrollTop()
+    }
   }
 
   const token = useSelector(state => state.account.account.token)
