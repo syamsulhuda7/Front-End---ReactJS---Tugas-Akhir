@@ -85,7 +85,7 @@ const Note = styled.div`
     font-weight: bold;
 `
 
-function Navbar({ inputValue }) {
+function Navbar({ inputValue, sendNotes }) {
   const [note, setNote] = useState([]);
   // const [token, setToken] = useState("");
 
@@ -144,7 +144,7 @@ function Navbar({ inputValue }) {
     };
 
     response();
-  }, [note]);
+  }, [sendNotes]);
 
   return (
     <>

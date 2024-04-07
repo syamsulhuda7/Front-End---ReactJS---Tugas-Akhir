@@ -16,10 +16,10 @@ const Container = styled.div`
 `;
 
 const LoginForm = styled.form`
-    background-color: #fff;
+    background-color: gold;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Title = styled.h2`
@@ -54,20 +54,20 @@ const Button = styled.button`
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: black;
+    font-weight: bold;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #75650b;
     }
 `;
 
 const RegisterLink = styled(Link)`
     display: block;
     text-align: center;
-    margin-top: 15px;
     color: #007bff;
     text-decoration: none;
 
@@ -77,11 +77,7 @@ const RegisterLink = styled(Link)`
 `;
 const ErrorMsg = styled.p`
     color: red;
-    /* font-size: 14px;
-    margin-top: 0px; */
-    /* position: absolute;  */
     text-align: center;
-    /* padding: 0px; */
 `;
 
 const Login = () => {
@@ -109,12 +105,9 @@ const login = async (e) => {
         }
         dispatch(addAccount({id:`${response.data.user._id}`, email:`${response.data.user.email}`, role:`${response.data.user.role}`, token:`${response.data.token}`}))
     } catch (error) {
-        // console.error(error.response); // Menampilkan pesan kesalahan dari server
-        // console.error(error); // Menampilkan pesan kesalahan dari server
+        console.log(error);
     }
 };
-
-// const otentikasi = useSelector(state => state.account.account)
 
     return (
         <Container>
@@ -130,7 +123,8 @@ const login = async (e) => {
                     <Input value={password} onChange={e => setPassword(e.target.value)} type="password" id="password" name="password" required />
                 </FormGroup>
                 <Button type="submit" >Login</Button>
-                <RegisterLink to="/register">Don't have an account? Register here.</RegisterLink>
+                <div style={{display:'flex',alignItems:'center',gap:'5px',marginTop:'5px'}}> Don't have an account? Register <RegisterLink to="/register">here.</RegisterLink>
+                </div>
             </LoginForm>
         </Container>
     );

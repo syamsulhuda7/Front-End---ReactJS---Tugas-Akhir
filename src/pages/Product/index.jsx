@@ -11,6 +11,9 @@ import PopUpProduct from "../../components/PopUpProduct";
 import Notification from "../../components/Notification";
 import store from "../../app/features/store";
 import Menu from "../../components/Menu";
+import { useSelector } from "react-redux";
+import MenuAddProduct from "../../components/MenuAddProduct";
+import PopUpEditProduct from "../../components/PopUpEditProduct";
 
 function Product() {
   const [getData, setGetData] = useState([]);
@@ -24,6 +27,12 @@ function Product() {
   const [category, setCategory] = useState([]);
   const [tag, setTag] = useState([]);
   const [submit, setSubmit] = useState(0);
+  const [note, setNote] = useState(0);
+  const [reloadCardProduct, setReloadCardProduct] = useState(0);
+  const [popUpEditData, setPopUpEditData] = useState(false)
+  const [editId, setEditId] = useState(false)
+
+  const role = useSelector(state => state.account.account.role)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +56,7 @@ function Product() {
     };
   
     fetchData();
-  }, [skip, inputValue, submit]);
+  }, [skip, inputValue, submit, reloadCardProduct]);
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
@@ -65,10 +74,12 @@ function Product() {
 
   return (
     <>
+      {popUpEditData && <PopUpEditProduct sendEditId={editId} sendRefresh={setReloadCardProduct} sendClose={setPopUpEditData}/>}
       {showNotification && <Notification/>}
       <Menu/>
+      {role == 'admin' && <MenuAddProduct/>}
       <div>
-        <Navbar inputValue={setInputValue} />
+        <Navbar inputValue={setInputValue} sendNotes={note} />
         <div style={{ height: "65px", width: "100%", backgroundColor: "black" }}></div>
       </div>
       {loading ? (<Loading />
@@ -84,7 +95,7 @@ function Product() {
                     <>
                       <div>
                         <h1 style={{ padding: "20px 50px", paddingBottom: "0px" }}>Product List</h1>
-                        <CardProduct nilaiId={setIdValue} popUp={setShowPopUp} data={getData}></CardProduct>
+                        <CardProduct nilaiId={setIdValue} popUp={setShowPopUp} data={getData} sendReload={setReloadCardProduct} setPopUpEditData={setPopUpEditData} editId={setEditId}></CardProduct>
                       </div>
 
                       {getData.length > 0 && (<Pagination skip={skip} setSkip={setSkip} rawData={rawData} />)}
@@ -96,7 +107,7 @@ function Product() {
         </>
       )}
       <>
-        {showPopUp === true && (<PopUpProduct closePopUp={setShowPopUp} idValue={idValue} />)}
+        {showPopUp === true && (<PopUpProduct sendNote={setNote} closePopUp={setShowPopUp} idValue={idValue} />)}
       </>
     </>
   );

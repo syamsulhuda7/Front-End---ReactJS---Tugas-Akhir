@@ -78,7 +78,7 @@ const Close = styled.button`
     }
 `
 
-function PopUpProduct({idValue, closePopUp}) {
+function PopUpProduct({idValue, closePopUp, sendNote}) {
     const [count, setCount] = useState(0);
     const [idResult, setIdResult] = useState({});
 
@@ -147,6 +147,9 @@ const handleAdd = async () => {
       dispatch(addProduct({ qty: count, name: idResult.name, id: idResult._id, img: idResult.image_url, price: idResult.price }));
       setCount(0);
       closePopUp(false);
+      setTimeout(() => {
+        sendNote(x => x+1)
+      }, 500);
     } catch (error) {
       console.error('Gagal memperbarui keranjang:', error);
       // Tindakan lanjutan jika gagal memperbarui keranjang

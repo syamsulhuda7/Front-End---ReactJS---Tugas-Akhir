@@ -208,9 +208,6 @@ const [error, setError] = useState([]);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    // console.log(formData);
-
     try {
         const response = await axios.post('http://localhost:3000/api/delivery-addresses', {
             name: formData.name,
@@ -221,7 +218,7 @@ const [error, setError] = useState([]);
             provinsi: formData.provinsi.name,
         }, {
             headers: {
-              'Authorization': `Bearer ${token}` // Menambahkan token ke header permintaan
+              'Authorization': `Bearer ${token}`
             }
           });
         setResponseData(response.data)
@@ -232,11 +229,8 @@ const [error, setError] = useState([]);
             alert('Alamat berhasil ditambahkan')
             window.location.replace('/checkout');
         }
-        // console.log(responseData);
-        // dispatch(addAccount({id:`${response.data.user._id}`, email:`${response.data.user.email}`, role:`${response.data.user.role}`, token:`${response.data.token}`}))
     } catch (error) {
-        // console.error(error.response); // Menampilkan pesan kesalahan dari server
-        // console.error(error); // Menampilkan pesan kesalahan dari server
+        console.error(error);
     }
   };
 

@@ -14,14 +14,18 @@ const Circle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* transition: all 0.3s ease-in-out; */
+  transition: all 0.15s ease-in-out;
   cursor: pointer;
   position: fixed;
   bottom: 20px;
   right: 20px;
   font-size: 20px;
   padding: 10px;
-
+  z-index: 2;
+  box-shadow: 0px 0px 10px 1px grey;
+  &:hover{
+    color: white;
+  }
 `;
 const Div = styled.div`
     height: 30px;

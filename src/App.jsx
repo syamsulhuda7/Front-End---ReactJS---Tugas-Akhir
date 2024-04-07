@@ -8,6 +8,9 @@ import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import FormAlamat from "./components/FormAlamat";
 import OrderDetail from "./pages/OrderDetail";
+import AddProduct from "./pages/AddProduct";
+import AddCategory from "./pages/AddCategory";
+import AddTag from "./pages/AddTag";
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route path='/checkout' element={<Checkout/>}></Route>
           <Route path='/formalamat' element={<FormAlamat/>}></Route>
           <Route path='/orderdetail' element={<OrderDetail/>}></Route>
+          <Route path='/addproduct' element={<AddProduct/>}></Route>
+          <Route path='/addcategory' element={<AddCategory/>}></Route>
+          <Route path='/addtag' element={<AddTag/>}></Route>
         </Routes>
       </Router>
     </>

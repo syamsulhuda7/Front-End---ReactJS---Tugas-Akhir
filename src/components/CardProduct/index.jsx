@@ -1,5 +1,9 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
+import { GoTrash } from "react-icons/go";
+import { CiEdit } from "react-icons/ci";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const Cover = styled.div`
   display: flex;
@@ -53,6 +57,23 @@ const Button = styled.button`
     scale: 103%;
   }
 `;
+const Button2 = styled.button`
+  padding: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+  background-color: #ffffff91;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all.2s ease-in-out;
+  position: absolute;
+  margin: -335px 0px 0px -220px;
+
+  &:hover {
+    scale: 103%;
+  }
+`;
 const DivUp = styled.div`
   height: 83px;
   width: 100%;
@@ -62,13 +83,39 @@ const DivDown = styled.div`
   width: 100%;
 `;
 
-function CardProduct({ data, nilaiId, popUp }) {
+function CardProduct({ data, nilaiId, popUp, sendReload, setPopUpEditData, editId }) {
 
   function handleClick (id) {
     nilaiId(id)
     popUp(true)
   }
 
+  const role = useSelector(state => state.account.account.role)
+  const token = useSelector(state => state.account.account.token)
+
+  const handleDelete = async (id) => {
+        const konfirmasi = confirm('yakin ingin menghapus produk?')
+        if (konfirmasi === true) {
+          try {
+              const response = await axios.delete(`http://localhost:3000/api/products/${id}`, {
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                  }
+                });
+              console.log(response);
+              alert(`product berhasil dihapus`)
+              sendReload(x => x+1)
+              // window.location.reload();
+          } catch (error) {
+              console.log(error);
+          }
+        }
+    };
+
+    const handleEdit = (id) => {
+      setPopUpEditData(true)
+      editId(id)
+    }
 
   return (
     <Cover>
@@ -89,7 +136,15 @@ function CardProduct({ data, nilaiId, popUp }) {
                 <h4>Rp. {item.price}</h4>
                 <h4>Stock {item.stock} pcs</h4>
               </DivHarga>
+              <div>
               <Button onClick={()=>handleClick(item._id)}>Buy</Button>
+              {role == 'admin' &&
+              <>
+                <Button2 onClick={()=>handleDelete(item._id)} title="delete"><GoTrash/></Button2>
+                <Button2 onClick={()=>handleEdit(item._id)} title="edit" style={{margin: '-300px 0px 0px -220px'}}><CiEdit/></Button2>
+              </>
+              }
+              </div>
             </DivDown>
           </Div>
         </Container>
