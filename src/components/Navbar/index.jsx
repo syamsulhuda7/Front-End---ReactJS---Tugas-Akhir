@@ -89,6 +89,8 @@ function Navbar({ inputValue, sendNotes, showSearch }) {
   // const [search, setSearch] = useState(false);
   // const [token, setToken] = useState("");
 
+  const role = useSelector(state => state.account.account.role)
+
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -160,7 +162,7 @@ function Navbar({ inputValue, sendNotes, showSearch }) {
           {showSearch && <InputSearch inputValue={inputValue} />}
           {acc.id ? (<Login onClick={logout}>Log Out</Login>
           ):(<Login onClick={() => navigate("/login")}>Log In</Login>)}
-          <Img onClick={toCart} src="src/assets/cart.png" />
+          {role && <Img onClick={toCart} src="src/assets/cart.png" />}
         </Div>
       </SNavbar>
     </>

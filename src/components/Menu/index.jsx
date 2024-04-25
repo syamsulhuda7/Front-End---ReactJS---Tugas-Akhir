@@ -69,7 +69,7 @@ const Menu = () => {
   return (
     <Circle onClick={()=>navigate('/orderdetail')}>
         <p style={{textAlign:'center'}}>My Order</p>
-        <Div>{data.length}</Div>
+        <Div>{data?.length}</Div>
     </Circle>
   );
 };

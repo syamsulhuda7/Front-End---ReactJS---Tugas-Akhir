@@ -28,12 +28,7 @@ const Img = styled.img`
   height: 300px;
   border-radius: 30px;
   filter: brightness(50%);
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    filter: brightness(75%);
-  }
 `;
 const DivText = styled.div`
   display: flex;
@@ -48,11 +43,12 @@ const DivText = styled.div`
 const Text = styled.p`
   color: white;
   font-size: 50px;
-  cursor: pointer;
 `;
 const ImgCategory = styled.img`
-  width: 60px;
-  height: 60px;
+  background-color: #ffffff6b;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
@@ -80,22 +76,23 @@ function CategoryProduct() {
   return (
     <Container>
       <Div>
-        <H1>Category</H1>
-        <H2>Explore Our Collections by Categories</H2>
+        <H1>Products</H1>
+        <div style={{display:'flex',gap:'20px',alignItems:'center'}}>
+          <H2>Explore Our Foods and Drinks</H2>
+          <ImgCategory onClick={handleClick} src="src/assets/arrow.png" />
+        </div>
       </Div>
       <Div style={{ flexDirection: "row", gap: "150px" }}>
         <div>
-          <Img onClick={handleClick} src="src/assets/profile/e.jpg"></Img>
+          <Img src="src/assets/profile/e.jpg"></Img>
           <DivText>
             <Text>Food</Text>
-            <ImgCategory onClick={handleClick} src="src/assets/arrow.png" />
           </DivText>
         </div>
         <div>
-          <Img onClick={handleClick} src="src/assets/profile/f.jpg"></Img>
+          <Img src="src/assets/profile/f.jpg"></Img>
           <DivText>
             <Text>Drink</Text>
-            <ImgCategory onClick={handleClick} src="src/assets/arrow.png" />
           </DivText>
         </div>
       </Div>
