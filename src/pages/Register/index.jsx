@@ -118,7 +118,7 @@ const register = async (e) => {
 
     return (
         <Container>
-            {isModal && <Modal text={'Order berhasil dibuat 👌'}/>}
+            {isModal && <Modal text={'Akun berhasil dibuat 👌'}/>}
             <RegisterForm onSubmit={register}>
                 <Title>Register</Title>
                 <FormGroup>

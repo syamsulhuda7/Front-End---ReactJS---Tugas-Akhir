@@ -13,6 +13,7 @@ const SuperContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 `
 const Container = styled.div`
     width: 400px;
@@ -23,6 +24,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: auto;
+    scrollbar-width: none;
 `
 const Close = styled.button`
     background-color: gold;

@@ -23,10 +23,9 @@ const slides = [
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulasi waktu loading dengan setTimeout
   setTimeout(() => {
     setIsLoading(false);
-  }, 500); // Ganti angka 2000 dengan waktu loading yang diinginkan (dalam milidetik)
+  }, 500);
 
   return (
     <>
