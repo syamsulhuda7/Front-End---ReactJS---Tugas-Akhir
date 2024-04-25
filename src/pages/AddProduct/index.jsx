@@ -213,13 +213,6 @@ const AddProduct = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         addProduct()
-        // const selectedTagValues = selectedTags.map(tagIndex => tag[tagIndex].name);
-        // console.log(selectedTagValues);
-        // setFormData({
-        //     ...formData,
-        //     tags: selectedTagValues
-        // });
-        // console.log(formData);
     }
 
     const handleTagsChange = (e) => {
@@ -245,8 +238,6 @@ const AddProduct = () => {
         })
     }
 
-    console.log(tagsValue);
-    
     return (
         <Container>
             <FormCard onSubmit={handleSubmit}>

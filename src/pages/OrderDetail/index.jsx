@@ -79,6 +79,18 @@ const Back = styled.button`
     color: #705f00;
   }
 `;
+const Num = styled.div`
+  font-weight: bold;
+  position: absolute;
+  background-color: black;
+  color: gold;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+`
 
 const OrderDetail = () => {
   const [dataOrder, setDataOrder] = useState([]);
@@ -118,6 +130,7 @@ const OrderDetail = () => {
       <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center'}}>
         {dataOrder.map((item, i) => (
             <Card key={i}>
+            <Num>{i+1}</Num>
             <div>
                 <div style={{display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'10px'}}>
                     <div style={{padding:'5px',borderRadius:'10px',backgroundColor:'white'}}>#{item._id}</div>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Modal from '../../components/Modal';
 
 const Container = styled.div`
     display: flex;
@@ -90,6 +91,7 @@ const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const [response, setResponse] = useState(null);
 const [error, setError] = useState(null);
+const [isModal, setIsModal] = useState(false)
 
 // Fungsi untuk meng-handle proses registrasi
 const register = async (e) => {
@@ -104,8 +106,10 @@ const register = async (e) => {
         if (response.data.error == 1) {
             setError(response.data.error);
         } else if (response.data.error != 1) {
-            alert('Selamat, Registrasi telah berhasil, silahkan login')
-            window.location.replace('/login');
+            setIsModal(true);
+            setTimeout(() => {
+              window.location.replace('/login');
+            }, 2000);
         }
     } catch (error) {
         console.error(error.response); // Menampilkan pesan kesalahan dari server
@@ -114,6 +118,7 @@ const register = async (e) => {
 
     return (
         <Container>
+            {isModal && <Modal text={'Order berhasil dibuat 👌'}/>}
             <RegisterForm onSubmit={register}>
                 <Title>Register</Title>
                 <FormGroup>

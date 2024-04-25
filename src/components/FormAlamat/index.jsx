@@ -226,7 +226,6 @@ const [error, setError] = useState([]);
             setError(response.data.error);
             console.log(response.data.error);
         } else if (response.data.error != 1) {
-            alert('Alamat berhasil ditambahkan')
             window.location.replace('/checkout');
         }
     } catch (error) {
@@ -247,6 +246,7 @@ const [error, setError] = useState([]);
                 // value={formData.provinsi}
                 onChange={handleChange}
             >
+                <option >Pilih salah satu . . .</option>
                 {provinsi.map((item) => (
                 <option key={item.id} value={item.id}>
                     {item.name}
@@ -265,6 +265,7 @@ const [error, setError] = useState([]);
             // value={formData.kabupaten}
             onChange={handleChange}
           >
+            <option >Pilih salah satu . . .</option>
             {kabupaten.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -283,6 +284,7 @@ const [error, setError] = useState([]);
             // value={formData.kecamatan}
             onChange={handleChange}
             >
+            <option >Pilih salah satu . . .</option>
             {kecamatan.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -301,6 +303,7 @@ const [error, setError] = useState([]);
             // value={formData.kelurahan}
             onChange={handleChange}
           >
+            <option >Pilih salah satu . . .</option>
             {kelurahan.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}

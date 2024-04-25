@@ -88,6 +88,7 @@ function FilterProduct({ sendInputValue, sendSubmit, sendCategory, sendTag }) {
     checkboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
+    sendSubmit((page) => page + 1);
   }
 
   return (

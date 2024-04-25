@@ -30,6 +30,11 @@ const Close = styled.button`
     padding: 7px;
     font-size: 15px;
     font-weight: bold;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+    &:hover{
+        color: white;
+    }
 `
 
 const InvoiceShow = ({setPopUpInvoice, idPopUp}) => {

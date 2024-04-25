@@ -24,7 +24,6 @@ const H1 = styled.h1`
   font-size: 40px;
   color: white;
   margin: 0;
-  width: 330px;
 `;
 
 const Div = styled.div`
@@ -85,8 +84,9 @@ const Note = styled.div`
     font-weight: bold;
 `
 
-function Navbar({ inputValue, sendNotes }) {
+function Navbar({ inputValue, sendNotes, showSearch }) {
   const [note, setNote] = useState([]);
+  // const [search, setSearch] = useState(false);
   // const [token, setToken] = useState("");
 
   const navigate = useNavigate();
@@ -157,7 +157,7 @@ function Navbar({ inputValue, sendNotes }) {
           <H5 onClick={() => navigate("/profile")}>Profile</H5>
         </Div>
         <Div>
-          <InputSearch inputValue={inputValue} />
+          {showSearch && <InputSearch inputValue={inputValue} />}
           {acc.id ? (<Login onClick={logout}>Log Out</Login>
           ):(<Login onClick={() => navigate("/login")}>Log In</Login>)}
           <Img onClick={toCart} src="src/assets/cart.png" />

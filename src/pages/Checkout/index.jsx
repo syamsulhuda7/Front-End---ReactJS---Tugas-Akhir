@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useSelector } from "react-redux"
+import Modal from "../../components/Modal"
 // import PopUpShippingAddress from "../../components/PopUpShippingAddress"
 
 const SuperContainer = styled.div`
@@ -98,11 +99,29 @@ const Dback = styled.img`
     overflow: auto;
     scrollbar-width: none;
   `
-  const DivOngkir = styled.div`
+  const DivOngkirSP = styled.div`
   height: 100px;
   width: 150px;
   background-color: white;
-  border: ${props => props.isActive ? '5px solid green' : 'transparent'};;
+  border: ${props => props.isactivesp ? '5px solid orange' : 'transparent'};;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  &:hover{
+  background-color: rgba(255,255,255,.5);
+  }
+  `
+  const DivOngkirBRI = styled.div`
+  height: 100px;
+  width: 150px;
+  background-color: white;
+  border: ${props => props.isactivebri ? '5px solid blue' : 'transparent'};;
   border-radius: 20px;
   padding: 10px;
   display: flex;
@@ -188,6 +207,8 @@ const DivOngkirK = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: auto;
+  scrollbar-width: none;
   `
   const DivEnd = styled.div`
   height: 50px;
@@ -236,11 +257,14 @@ function Checkout () {
   const [isactiveh, setisactiveh] = useState(false);
   const [isactiver, setisactiver] = useState(false);
   const [isactivek, setisactivek] = useState(false);
+  const [isactivebri, setisactivebri] = useState(false);
+  const [isactivesp, setisactivesp] = useState(false);
   const [ongkir, setOngkir] = useState(0);
   const [orderValue, setOrderValue] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [showDetail, setShowDetail] = useState(false)
+  const [isModal, setIsModal] = useState(false)
 
   function toNominal(number) {
     // Pisahkan angka menjadi grup setiap tiga digit dari belakang
@@ -325,9 +349,13 @@ function Checkout () {
   };
   const handleBRI = () => {
     setPaymentMethod('Bank BRI')
+    setisactivebri(true)
+    setisactivesp(false)
   }
   const handleSPAY = () => {
     setPaymentMethod('Shopeepay')
+    setisactivebri(false)
+    setisactivesp(true)
   }
 
   const order = async (e) => {
@@ -352,8 +380,10 @@ function Checkout () {
             // setError(response.data.error);
             console.log(response.data.error);
         } else if (response.data.error != 1) {
-            alert('Order berhasil dibuat 👌')
-            window.location.replace('/orderdetail');
+            setIsModal(true);
+            setTimeout(() => {
+              window.location.replace('/orderdetail');
+            }, 2000);
         }
     } catch (error) {
         console.error(error);
@@ -376,6 +406,7 @@ function Checkout () {
 
     return (
         <SuperContainer>
+          {isModal && <Modal text={'Order berhasil dibuat 👌'}/>}
           {/* {popUp && <PopUpShippingAddress setPopUp={setPopUp}/>} */}
             <div style={{backgroundColor:'black',color:'gold',display:'flex'}}>
                 <Divback onClick={() => navigate("/cart")}>
@@ -402,11 +433,10 @@ function Checkout () {
                             name="Alamat"
                             onChange={handleChange}>
                             {/* value={selectedIds} */}
+                            <option >Pilih salah satu . . .</option>
                             {alamat.map((item) => (
-                            <option key={item._id} value={item._id}>
+                            <option style={{overflow:'auto'}} key={item._id} value={item._id}>
                                 NAMA: {item.name?.toUpperCase()};   
-                                ALAMAT: {item.kelurahan}, {item.kecamatan}, {item.kabupaten}, {item.provinsi};   
-                                DETAIL : {item.detail?.toUpperCase()}
                             </option>
                             ))}
                         </Select>
@@ -448,12 +478,12 @@ function Checkout () {
                     </div>
                     <Title>Payment Method</Title>
                     <div style={{display:'flex',gap:'15px',margin:'0px 10px 20px'}}>
-                    <DivOngkir onClick={handleBRI}>
+                    <DivOngkirBRI isactivebri={isactivebri} onClick={handleBRI}>
                       <Img src="src/assets/BRI.png" alt="" />
-                    </DivOngkir>
-                    <DivOngkir onClick={handleSPAY}>
+                    </DivOngkirBRI>
+                    <DivOngkirSP isactivesp={isactivesp} onClick={handleSPAY}>
                       <Img src="src/assets/SPAY.png" alt="" />
-                    </DivOngkir>
+                    </DivOngkirSP>
                     </div> 
                         <GoOrderDetail onClick={handleShowDetail}>
                         Cek Detail Pembayaran!
@@ -461,47 +491,49 @@ function Checkout () {
 
                 </div>
                 <div>
-                  {showDetail && 
-                  <>
                     <Title>Order Details</Title>
                     <DivOrderDetail>
-                    <div>
-                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
-                        <p>Total Produk : </p>
-                        <p>Rp {toNominal(totalPrice)}</p>
-                      </div>
-                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
-                        <p>Alamat Pengiriman : </p>
-                        <div style={{maxWidth:'300px',textAlign:'right'}}>
-                          NAMA : {selectedIds[0]?.name.toUpperCase()}
-                          <br />
-                          ALAMAT : {selectedIds[0]?.kelurahan.toUpperCase()}, 
-                          {selectedIds[0]?.kecamatan.toUpperCase()}, 
-                          {selectedIds[0]?.kabupaten.toUpperCase()}, 
-                          {selectedIds[0]?.provinsi.toUpperCase()}
-                          <br />
-                          DETAIL : {selectedIds[0]?.detail.toUpperCase()}
+                  {showDetail && 
+                    <>
+                      <div>
+                        <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                          <p style={{fontWeight:'bold'}}>Total Produk : </p>
+                          <p>Rp {toNominal(totalPrice)}</p>
+                        </div>
+                        <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                          <p style={{fontWeight:'bold'}}>Alamat Pengiriman : </p>
+                          <div style={{maxWidth:'300px',textAlign:'right'}}>
+                            NAMA : {selectedIds[0]?.name.toUpperCase()}
+                            <br />
+                            ALAMAT : {selectedIds[0]?.kelurahan.toUpperCase()}, 
+                            {selectedIds[0]?.kecamatan.toUpperCase()}, 
+                            {selectedIds[0]?.kabupaten.toUpperCase()}, 
+                            {selectedIds[0]?.provinsi.toUpperCase()}
+                            <br />
+                            DETAIL : {selectedIds[0]?.detail.toUpperCase()}
+                          </div>
+                        </div>
+                        <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                          <p style={{fontWeight:'bold'}}>Biaya Pengiriman : </p>
+                          <div style={{maxWidth:'300px',textAlign:'right'}}>Rp {toNominal(ongkir)}</div>
+                        </div>
+                        <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
+                          <p style={{fontWeight:'bold'}}>Metode Pembayaran : </p>
+                          <div style={{maxWidth:'300px',textAlign:'right'}}>{paymentMethod}</div>
                         </div>
                       </div>
-                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
-                        <p>Biaya Pengiriman : </p>
-                        <div style={{maxWidth:'300px',textAlign:'right'}}>Rp {toNominal(ongkir)}</div>
+                      <div style={{padding:'10px',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                        <h3>Total Pembayaran</h3>
+                        <h1>Rp {toNominal(totalPrice+ongkir)}</h1>
                       </div>
-                      <div style={{display:'flex',justifyContent:'space-between',padding:'5px'}}>
-                        <p>Metode Pembayaran : </p>
-                        <div style={{maxWidth:'300px',textAlign:'right'}}>{paymentMethod}</div>
-                      </div>
-                    </div>
-                    <div style={{padding:'10px',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
-                      <h3>Total Pembayaran</h3>
-                      <h1>Rp {toNominal(totalPrice+ongkir)}</h1>
-                    </div>
-                    </DivOrderDetail>
-                    <DivEnd onClick={order}>
-                        <div>Buat Pesanan</div>
-                    </DivEnd>
-                  </>
+                    </>
                   }
+                    </DivOrderDetail>
+                    {showDetail && 
+                    (<DivEnd onClick={order}>
+                        <div>Buat Pesanan</div>
+                    </DivEnd>)
+                    }
                 </div>
             </Container>
         </SuperContainer>

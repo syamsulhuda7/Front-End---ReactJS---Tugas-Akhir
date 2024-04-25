@@ -1,3 +1,4 @@
+import Footer from "../../components/Footer";
 import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
 
@@ -12,6 +13,7 @@ function Profile() {
       </div>
       <h1>THIS IS PROFILE PAGE</h1>
       <Loading/>
+      <Footer/>
     </>
   );
 }

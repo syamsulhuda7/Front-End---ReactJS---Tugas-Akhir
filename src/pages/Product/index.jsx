@@ -30,7 +30,8 @@ function Product() {
   const [note, setNote] = useState(0);
   const [reloadCardProduct, setReloadCardProduct] = useState(0);
   const [popUpEditData, setPopUpEditData] = useState(false)
-  const [editId, setEditId] = useState(false)
+  const [editId, setEditId] = useState(false);
+  const [search, setSearch] = useState(true);
 
   const role = useSelector(state => state.account.account.role)
 
@@ -52,6 +53,7 @@ function Product() {
         console.log(error);
       } finally {
         setLoading(false);
+        setSearch(true)
       }
     };
   
@@ -79,7 +81,7 @@ function Product() {
       <Menu/>
       {role == 'admin' && <MenuAddProduct/>}
       <div>
-        <Navbar inputValue={setInputValue} sendNotes={note} />
+        <Navbar showSearch={search} inputValue={setInputValue} sendNotes={note} />
         <div style={{ height: "65px", width: "100%", backgroundColor: "black" }}></div>
       </div>
       {loading ? (<Loading />
